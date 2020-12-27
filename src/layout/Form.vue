@@ -13,15 +13,11 @@
                 <label for="seq">NO.</label>
                 <b-input id="seq" name="seq" type="text" v-model="form.seq" readonly></b-input>
               </div>
-              <div v-if="!showFlag">
+              <div v-if="!showFlag && !createFlag">
                 <label for="title">제목</label>
                 <b-input id="title" name="title" type="text" v-model="form.title" readonly maxlength="100"></b-input>
               </div>
-              <div v-else-if="showFlag">
-                <label for="title">제목</label>
-                <b-input id="title" name="title" type="text" v-model="form.title" maxlength="100"></b-input>
-              </div>
-              <div v-else-if="createFlag">
+              <div v-else-if="showFlag || createFlag">
                 <label for="title">제목</label>
                 <b-input id="title" name="title" type="text" v-model="form.title" maxlength="100"></b-input>
               </div>
@@ -33,10 +29,6 @@
                 <label for="writer">작성자</label>
                 <b-input id="writer" name="writer" type="text" v-model="form.adminName" readonly maxlength="20"></b-input>
               </div>
-              <!-- <div v-if="showFlag">
-                <label for="writer">작성자</label>
-                <b-input id="writer" name="writer" type="text" v-model="form.adminName" readonly maxlength="20"></b-input>
-              </div> -->
               <div>
                 <label for="contents">내용</label>
                 <editor 
@@ -63,12 +55,14 @@
           <b-button class="btn-fill mb-2 mr-sm-2 mb-sm-1" variant="primary" style="float:left" @click="list">목록</b-button>
           <b-button v-if="createFlag" class="btn-fill mb-2 mr-sm-2 mb-sm-1" variant="primary" style="float:left" @click="save">저장</b-button>
           <b-button v-if="showFlag" class="btn-fill mb-2 mr-sm-2 mb-sm-1" variant="primary" style="float:left" @click="update">저장</b-button>
-          <b-button v-if="!showFlag" class="btn-fill mb-2 mr-sm-2 mb-sm-1" variant="primary" style="float:left" @click="modify">수정</b-button>
+          <b-button v-if="!showFlag && !createFlag" class="btn-fill mb-2 mr-sm-2 mb-sm-1" variant="primary" style="float:left" @click="modify">수정</b-button>
           <b-button v-if="!createFlag" class="btn-fill mb-2 mr-sm-2 mb-sm-1" variant="danger" style="float:left" @click="del">삭제</b-button>
           <br><br>
           <hr>
           <card v-if="!btnControl" style="clear:both">
-            <comment></comment>
+            <comment
+             :seq="form.seq">
+            </comment>
           </card>
           <modal
             :status="modal.status"
@@ -113,7 +107,7 @@ export default {
           delete: "삭제"
         },
         bodyMsg:{
-          delete: "정말 삭제하시겠습니까?.",
+          delete: "정말 삭제 하시겠습니까?",
           fail: "저장 실패 하였습니다. 정보를 확인해주세요.",
           title: "제목을 입력해 주세요.",
           content: "내용을 입력해 주세요."

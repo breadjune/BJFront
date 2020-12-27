@@ -3,27 +3,18 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <card class="strpied-tabled-with-hover"
-                body-classes="table-responsive"
-          >
+          <card class="strpied-tabled-with-hover">
             <template slot="header">
               <h3 class="card-title">알림 관리</h3>
               <hr>
             </template>
             <search :options="options" @keywordSearch="searchData"></search>
-            <div style="overflow:auto">
-              <!-- <l-table class="table-hover table-striped"
-                      :headers="row.headers"
-                      :columns="row.columns"
-                      :data="row.data"
-                      @rowSelected="onRowSelected"
-                      @sortList="onSortList"
-              >
-              </l-table> -->
+            <div style="overflow-x:scroll">
               <b-table
                 id="table"
                 striped
                 hover
+                table-class="text-nowrap"
                 selectable
                 select-mode="single"
                 :fields="fields"
@@ -165,4 +156,7 @@
   }
 </script>
 <style>
+body {
+ overflow-x: hidden;
+}
 </style>

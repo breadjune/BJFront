@@ -2,12 +2,17 @@
 <b-form>
   <div>
     <label for="contents">댓글 작성</label>
-    <b-form-textarea id="contents" name="contents" type="text"></b-form-textarea>
+    <div class="text-box">
+      <b-form-textarea id="contents" rows="3" name="contents" type="text" style="width:100%; border: 0;" no-resize v-model="comment"></b-form-textarea>
+      <hr style="margin:5px">
+      <b-row align-h="end" style="margin-right:0">
+        <b-button class="btn-fill mb-2 mr-sm-2 mb-sm-1" variant="primary" @click="create" style="padding:5px">등록</b-button>
+      </b-row>
+    </div>
     <hr>
     <div v-for="(item, index) in data" :key="index">
       <slot :row="item">
-          <p class="uname"><b>{{item.userId}}</b></p>
-          <p class="mdate">{{item.modDate}}</p>
+          <p class="uname"><b>{{item.adminId}}</b> | <span class="mdate">{{item.modDate}}</span></p>
           <p class="comment" v-html="item.comment">{{item.comment}}</p>
           <hr>
         <!-- {{item.userId}} -->
@@ -15,38 +20,56 @@
     </div>
   </div>
 </b-form>
-</template>
+</template>d
 <script>
+  import axioMixin from "@/components/axioMixin"
+
   export default {
+    mixins: [axioMixin],
     data() {
       return {
-        data: [
-          // { userId: "youngjun93", modDate: "2020.11.14 15:30", comment: '댓글 테스트입니다. <br> 안녕하세요'},
-          // { userId: "gksjs3468", modDate: "2020.11.14 15:30", comment: '댓글 테스트입니다2.'},
-          // { userId: "sss424", modDate: "2020.11.14 15:30", comment: '댓글 테스트입니다3.'},
-          // { userId: "hddkkll", modDate: "2020.11.14 15:30", comment: '댓글 테스트입니다4.'},
-          // { userId: "atingle", modDate: "2020.11.14 15:30", comment: '댓글 테스트입니다5.'},
-          // { userId: "test123", modDate: "2020.11.14 15:30", comment: '댓글 테스트입니다6.'},
-          // { userId: "test456", modDate: "2020.11.14 15:30", comment: '댓글 테스트입니다7.'},
-          // { userId: "test789", modDate: "2020.11.14 15:30", comment: '댓글 테스트입니다8.'},
-          // { userId: "test000", modDate: "2020.11.14 15:30", comment: '댓글 테스트입니다9.'},
-        ],
-        columns: ['userId','modDate','comment'],
+        data: [],
+        comment: "",
+        columns: ['adminId','modDate','comment'],
       }
     },
     props: {
-      // columns: Array,
-      // data: Array,
-      // bCode: String
+      seq: ['seq']
+    },
+    watch: {
+      seq() {
+        console.log("seq : " + this.seq);
+        let formData = Object();
+        formData.seq = this.seq;
+        this.list(formData);
+      }
     },
     methods: {
-      itemValue (item, column) {
-        return item[column]
+      list: async function (form) {
+        var response = await this.request("/restapi/board/comment/search", form);
+        console.log("result : " + JSON.stringify(response));
+        this.data = response.result;
+      },
+      create: async function () {
+        let formData = Object();
+        formData.seq = this.seq;
+        formData.adminId = this.$session.get("adminId");
+        formData.comment = this.comment;
+        var response = await this.request("/restapi/board/comment/create", formData);
+        if(response !== undefined || response !== "") {
+          this.list(formData);
+        }
       }
     }
   }
 </script>
 <style>
+.text-box {
+  border: 1.5px solid;
+  border-radius: 5px;
+  border-color: rgb(153,153,153);
+  padding: 10px;
+}
 .uname, .mdate {
   margin-bottom : 0;
 }
@@ -55,9 +78,11 @@
   color: rgb(153,153,153);
 }
 .comment {
-  border: 1.5px solid;
+  /* border: 1.5px solid; */
   height: 100px;
-  border-radius: 5px;
-  border-color: rgb(153,153,153);
+  /* border-radius: 5px;
+  border-color: rgb(153,153,153); */
+  padding: 10px;
+  overflow: scroll;
 }
 </style>

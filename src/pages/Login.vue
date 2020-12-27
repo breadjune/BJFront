@@ -75,6 +75,7 @@
             // this.$store.commit("loginStore/loginComplete", data)
             this.$session.start();
             this.$session.set('adminName', data.name);
+            this.$session.set('adminId', data.id);
             this.$session.set('level', data.adminGroupSeq);
             console.log("authToken : " + result.headers.authorization);
             this.$cookie.set('auth', result.headers.authorization);
