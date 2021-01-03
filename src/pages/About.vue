@@ -1,25 +1,8 @@
 <template>
-<b-fr
+<div>
+    <iframe src="https://www.notion.so/June-c8d0274376f949ea9a69dc689f937d6c"></iframe>
+</div>
 </template>
 
 <script>
-    import axios from "axios"
-    
-    export default {
-        data() {
-            return {
-            }
-        },
-
-        methods: {
-            save() {
-            },
-            list() {
-                this.$emit('rename', 'Content');
-                this.$router.push({
-                    name: "MemberManage"
-                });
-            }
-        }
-    }
 </script>

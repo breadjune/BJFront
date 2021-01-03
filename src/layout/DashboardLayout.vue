@@ -57,6 +57,8 @@
   import MobileMenu from './MobileMenu.vue'
   import Overview from '../pages/Overview'
   import Notice from '../pages/admin/notice/Manage.vue'
+  import Document from '../pages/Document.vue'
+  import About from '../pages/About.vue'
   export default {
     data() {
       return {
@@ -72,7 +74,9 @@
       Content,
       Notice,
       MobileMenu,
-      Overview
+      Overview,
+      Document,
+      About
     },
     mounted(){
       console.log('auth : ' + this.$session.get('auth'));
